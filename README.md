@@ -20,7 +20,7 @@ A secondary benefit of this is that the activity does not show up in DeviceEvent
 
 ## Protocol Implementation
 
-SharpADWS implements [MS-ADDM](https://learn.microsoft.com/zh-cn/openspecs/windows_protocols/ms-addm/af3eb9be-b407-4423-a707-387fedbbaf1d), [MS-WSTIM](https: //learn.microsoft.com/en-cn/openspecs/windows_protocols/ms-wstim/08164681-df91-49bd-a0ea-ce949d1cc536) and [MS-WSDS](https://learn.microsoft.com/en-us /openspecs/windows_protocols/ms-wsds/2ded136c-2fe2-4f7d-8d09-a7118815c6bb) protocol, you can use the source code of this project to easily implement the following operations on Active Directory Web Services:
+SharpADWS implements [MS-ADDM](https://learn.microsoft.com/zh-cn/openspecs/windows_protocols/ms-addm/af3eb9be-b407-4423-a707-387fedbbaf1d), [MS-WSTIM](https://learn.microsoft.com/zh-cn/openspecs/windows_protocols/ms-wstim/08164681-df91-49bd-a0ea-ce949d1cc536) and [MS-WSDS](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-wsds/2ded136c-2fe2-4f7d-8d09-a7118815c6bb) protocol, you can use the source code of this project to easily implement the following operations on Active Directory Web Services:
 
 - Enumerate：Creates a context that maps to the specified search query filter.
 - Pull：Retrieve the result object in the context of a specific enumeration.
