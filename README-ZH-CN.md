@@ -473,6 +473,7 @@ C:\Users\Marcus>SharpADWS.exe Certify -action find -enrolleeSuppliesSubject -cli
                                     
 # ...
 ```
+**需要注意的是，Certify Method 的 `find` 必须依赖于已经通过 Cache Method 建立的映射缓存。**
 
 Certify method 的 `modify` 允许您在拥有对目标模版的写入权限下，修改证书模版的属性，例如开启 `CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT` 标志或启用 Client Authentication：
 
