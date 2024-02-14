@@ -41,7 +41,7 @@ SharpADWS implements [MS-ADDM](https://learn.microsoft.com/zh-cn/openspecs/windo
 
 The command line argument `-h` can be used to display the following usage information:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe -h
 
 SharpADWS 1.0.0-beta - Copyright (c) 2024 WHOAMI (whoamianony.top)
