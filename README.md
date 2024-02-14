@@ -1,5 +1,7 @@
 # SharpADWS
 
+[中文文档](https://github.com/wh0amitz/SharpADWS/blob/master/README-ZH-CN.md)
+
 Active Directory reconnaissance and exploitation for Red Teams via the Active Directory Web Services (ADWS).
 
 ## Overview
