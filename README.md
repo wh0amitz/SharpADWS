@@ -475,6 +475,7 @@ C:\Users\Marcus>SharpADWS.exe Certify -action find -enrolleeSuppliesSubject -cli
                                     
 # ...
 ```
+**It should be noted that the `find` of Certify Method must rely on the mapping cache that has been established through Cache Method. **
 
 The `modify` action of the Certify method allows you to modify the properties of the certificate template, such as turning on the `CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT` flag or enabling Client Authentication, if you have write access to the target template:
 
