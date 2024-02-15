@@ -201,13 +201,15 @@ namespace SharpADWS.Methods.ACL
 
                 if (ADRule.ActiveDirectoryRights.HasFlag(ActiveDirectoryRights.GenericWrite) || ADRule.ActiveDirectoryRights.HasFlag(ActiveDirectoryRights.WriteProperty))
                 {
-                    yield return new Ace
+                    if(ADRule.ObjectType.ToString() == "00000000-0000-0000-0000-000000000000")
                     {
-                        RightName = "WriteProperty",
-                        Principal = IdentityReference,
-                    };
+                        yield return new Ace
+                        {
+                            RightName = "WriteProperty",
+                            Principal = IdentityReference,
+                        };
+                    }
                 }
-
             }
         }
 
