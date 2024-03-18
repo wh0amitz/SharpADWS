@@ -178,12 +178,12 @@ C:\Users\Marcus>SharpADWS.exe acl -dn "CN=Users,DC=corp,DC=local" -scope Subtree
 In addition, the Acl method also supports enumeration of specific objects:
 
 ```cmd
-SharpADWS.exe -user                # Enumerate DACL for all user objects
-SharpADWS.exe -computer            # Enumerate DACL for all computer objects
-SharpADWS.exe -group               # Enumerate DACL for all group objects
-SharpADWS.exe -domain              # Enumerate DACL for all domain objects
-SharpADWS.exe -domaincontroller    # Enumerate DACL for all domain controller objects
-SharpADWS.exe -gpo                 # Enumerate DACL for all gpo objects
+SharpADWS.exe acl -user                # Enumerate DACL for all user objects
+SharpADWS.exe acl -computer            # Enumerate DACL for all computer objects
+SharpADWS.exe acl -group               # Enumerate DACL for all group objects
+SharpADWS.exe acl -domain              # Enumerate DACL for all domain objects
+SharpADWS.exe acl -domaincontroller    # Enumerate DACL for all domain controller objects
+SharpADWS.exe acl -gpo                 # Enumerate DACL for all gpo objects
 ```
 
 **It should be noted that the use of Acl Method must rely on the mapping cache that has been established through Cache method. **
