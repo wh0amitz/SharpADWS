@@ -174,12 +174,12 @@ C:\Users\Marcus>SharpADWS.exe acl -dn "CN=Users,DC=corp,DC=local" -scope Subtree
 此外，Acl method 还支持对特定对象的枚举：
 
 ```cmd
-SharpADWS.exe -user                # Enumerate DACL for all user objects
-SharpADWS.exe -computer            # Enumerate DACL for all computer objects
-SharpADWS.exe -group               # Enumerate DACL for all group objects
-SharpADWS.exe -domain              # Enumerate DACL for all domain objects
-SharpADWS.exe -domaincontroller    # Enumerate DACL for all domain controller objects
-SharpADWS.exe -gpo                 # Enumerate DACL for all gpo objects
+SharpADWS.exe acl -user                # Enumerate DACL for all user objects
+SharpADWS.exe acl -computer            # Enumerate DACL for all computer objects
+SharpADWS.exe acl -group               # Enumerate DACL for all group objects
+SharpADWS.exe acl -domain              # Enumerate DACL for all domain objects
+SharpADWS.exe acl -domaincontroller    # Enumerate DACL for all domain controller objects
+SharpADWS.exe acl -gpo                 # Enumerate DACL for all gpo objects
 ```
 
 **需要注意的是，Acl Method 的使用必须依赖于已经通过 Cache Method 建立的映射缓存。**
