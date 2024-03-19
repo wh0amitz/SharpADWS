@@ -142,7 +142,7 @@ namespace SharpADWS
             {
                 if (String.IsNullOrEmpty(options.Password))
                 {
-                    Console.WriteLine("Missing parameter: -password.");
+                    Console.WriteLine("Missing password parameter: -p.");
                 }
                 Credential = new NetworkCredential(options.Username, options.Password, options.DomainName);
             }

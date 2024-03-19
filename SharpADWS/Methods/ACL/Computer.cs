@@ -1,5 +1,6 @@
 ﻿using SharpADWS.ADWS;
 using System;
+using System.Net;
 using System.Collections.Generic;
 using SharpADWS.ADWS.Enumeration;
 
@@ -29,6 +30,36 @@ namespace SharpADWS.Methods.ACL
                 {
                     ACLParser aclParser = new ACLParser(userObject.NTSecurityDescriptor, userObject, Trustees, Rights, null, Rid, OutputFormat);
                     aclParser.Parse();
+                }
+            }
+            List<ADObject> ComputerObjects = enumerateRequest.Enumerate("(&(operatingSystem=*)(sAMAccountName=*))", this.DefaultNamingContext, "subtree", new string[] { "name", "dNSHostName" });
+
+            Console.WriteLine("Domain Computer IP:");
+            foreach (ADObject adObject in ComputerObjects)
+            {
+                string Domian = adObject.DNSHostName;
+                try
+                {
+                    IPAddress[] addresses = Dns.GetHostAddresses(Domian);
+                    Console.Write($"{Domian}: ");
+                    int len = addresses.Length;
+                    foreach (IPAddress address in addresses)
+                    {
+                        Console.Write(address);
+                        if (len > 1)
+                        {
+                            Console.Write(",");
+                            len--;
+                        }
+                        else
+                        {
+                            Console.WriteLine();
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine($"{Domian} Down");
                 }
             }
         }
